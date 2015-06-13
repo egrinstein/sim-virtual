@@ -28,7 +28,7 @@ static int access_index(int * pageIndexes, int max_pages, unsigned int index, in
 void simulate(int mode, Access* accesses, int num_accesses, int page_size, int memory_size){
 
 	unsigned int (*evict_algorithm)(Page**, int*, int);
-    int (*update_algorithm)(Page**, int);
+    void (*update_algorithm)(Page**, int);
 	int * pageIndexes;
 	Page * pageTable;
 	Page ** pagesInMemory;
@@ -98,9 +98,9 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 				aux_index = evict_algorithm(pagesInMemory, pageIndexes, num_pages);
 
 				
-                if (pageTable[pageIndexes[aux_index]].w)
+                if (pageTable[pageIndexes[aux_index]].m)
                     pages_written_to_disk++;
-                pageTable[pageIndexes[aux_index]].w = 0;
+                pageTable[pageIndexes[aux_index]].m = 0;
                 pageTable[pageIndexes[aux_index]].r = 0;
 
 			}
@@ -113,7 +113,7 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 
 		//INFO UPDATE (always executed)::
 		pageTable[aux_index].last_access = i;
-        if(logEntry.access == 'W')
+		if(accesses[i].mode == 'W')
             pageTable[aux_index].m = 1;
         pageTable[aux_index].r = 1; //it always changes r to 1 (see NRU).
     }

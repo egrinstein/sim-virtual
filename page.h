@@ -1,7 +1,12 @@
 #ifndef PAGEH
 #define PAGEH
 
-typedef struct page Page;
+typedef struct page{
+	int last_access;
+	int r;
+	int m;
+} Page;
+
 
 int getAddress(unsigned int addr,int pagesize);
 
