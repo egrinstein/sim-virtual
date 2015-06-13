@@ -1,5 +1,6 @@
 #include "access.h"
 #include "page.h"
+#include "sim.h"
 #include <stdio.h>
 #include <stdlib.h>
 #define INTERRUPT 50
