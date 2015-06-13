@@ -7,9 +7,11 @@ typedef struct page{
 	int r;
 	int m;
 
-	long reference_counter; //for LRU
-    
+	int corresponding_frame;
+	
+	long reference_counter; //for LRU    
 } Page;
+
 
 
 
@@ -19,12 +21,8 @@ int getAddress(unsigned int addr,int pagesize){
     return addr << shift;
 }
 
-static char getPageClass(Page * page){ 
-	//used in NRU
-	return 2*page->m + page->r;
-}
 
-Page *createPageTable(int pages_size)
+Page * createPageTable(int pages_size)
 {
 	int i;
     int pageBits = getAddress(pageSize);
@@ -58,25 +56,10 @@ Page ** createMemory(int num_pages){
     return pagesInMemory;
 }
 
-Page * createPageTable(int pageSize){
 
-    int pageBits = getPageBits(pageSize);
-    int pageTableSize = pow(2, 32 - pageBits);
-    printfd("Page table entries: %d\n", pageTableSize);
-
-    Page *pageTable = (PageTable*)malloc(pageTableSize * sizeof(PageTable));
-    if(!pageTable) {
-        printf("Not enough memory to simulate page table.\n");
-        return NULL;
-    }
-
-    memset(pageTable, 0, pageTableSize * sizeof(PageTable));
-    return pageTable;
+static char getPageClass(Page * page){ 
+	return 2*page->m + page->r;
 }
-
-
-
-
 int NRU(Page * pageTable, int num_pages ){
 	int i,
 		class;

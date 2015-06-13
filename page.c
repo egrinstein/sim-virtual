@@ -7,9 +7,11 @@ typedef struct page{
 	int r;
 	int m;
 
-	long reference_counter; //for LRU
-    
+	int corresponding_frame;
+	
+	long reference_counter; //for LRU    
 } Page;
+
 
 
 
@@ -55,10 +57,7 @@ Page ** createMemory(int num_pages){
 }
 
 
-static char getPageClass(Page * page){ 
-	return 2*page->m + page->r;
-}
-int NRU(Page * pageTable, int num_pages ){
+Page * evict_NRU(Page ** pagesInMemory , int num_pages ){
 	int i,
 		class;
 	
@@ -69,35 +68,30 @@ int NRU(Page * pageTable, int num_pages ){
 
 	
 	int first_to_check = rand()%num_pages;
+
 	for (i=0;i<num_pages;i++){
 		int index = (first_to_check + i)%num_pages;
-		Page * current_page = pageTable + index*sizeof(Page);
-			
-		if ( getPageClass(current_page) < lowest_class_seen ){
-			lowest_class_seen = getPageClass(current_page);
+		Page * current_page = pagesInMemory + index*sizeof(Page);
+		int curr_class = getPageClass(current_page)
+		if ( curr_class < lowest_class_seen ){
+			if ( curr_class == 0 ) return current_page;
+			lowest_class_seen = curr_class;
 			lowest_class_page_seen = current_page;	
 		}
 			
 	}	
-	//return INDEX_OF(lowest class page seen );
-	//implement ^
+	return current_page;
 	
 }
 
-int startSEG(){
-	
+Page * evict_SEG(Page ** pagesInMemory , int num_pages ){}
 
+Page * evict_LRU(Page ** pagesInMemory , int num_pages ){}
+
+
+static char getPageClass(Page * page){ 
+	return 2*page->m + page->r;
 }
-
-int LRU(){
-	
-
-}
-
-}
-
-
-
 
 
 
