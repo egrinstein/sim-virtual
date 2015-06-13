@@ -41,7 +41,7 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
     
     for(i = 0; i < num_accesses; i++){
 		Access * curr_access = access[i];
-		int curr_page_index = getAddress(access[i]->address,page_size);
+		int curr_page_index = curr_access->address >> 
         dt = i-dt;
         interrupt_dt = interrupt_dt + dt;
         if(interrupt_dt >= INTERRUPT){
