@@ -2,15 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-typedef struct page{
-    int last_access;
+struct page{
+	int last_access;
 	int r;
 	int m;
-
-	int corresponding_frame;
-	
-	long reference_counter; //for LRU    
-} Page;
+} ;
 
 
 
@@ -22,7 +18,7 @@ int getAddress(unsigned int addr,int pagesize){
 }
 
 
-Page * createPageTable(int pages_size)
+Page * createPageTable(int page_size)
 {
 	int i;
     int pageBits = getAddress(pageSize);
@@ -33,7 +29,7 @@ Page * createPageTable(int pages_size)
 	auxPage = pageTable;
 	
     for (i=0;i<tableSize;i++){
-		auxPage->lastAccess = 0; //seila
+		auxPage->lastAccess = 0; 
 		auxPage->r = 0;
 		auxPage->m = 0;
 		auxPage->reference_counter = 0; //tlvz suma depois
@@ -43,27 +39,38 @@ Page * createPageTable(int pages_size)
     return pageTable;
 }
 
+
+
 Page ** createMemory(int num_pages){
-    Page **pagesInMemory = (Page**)malloc( num_pages * sizeof(Page*));
+    PagesInMemory **pagesInMemory = (Page**)malloc( num_pages * sizeof(Page*));
 
     if(!pageVector) {
-        printf("Not enough memory to simulate page vector.\n");
+        printf("Not enough memory to simulate memory.\n");
         return NULL;
     }
     int i;
-    for(i = 0; i < *nPageVector; ++i)
-        pageVector[i] = NULL;
+    for(i = 0; i < *num_pages; ++i)
+        PagesInMemory[i] = NULL;
     return pagesInMemory;
 }
 
 
-Page * evict_NRU(Page ** pagesInMemory , int num_pages ){
+void update_NRU(Page ** pages_in_memory , int num_pages)
+{
+    int i;
+    for(i = 0; i < num_pages; ++i) {
+        if(pages_in_memory[i]) {
+			pages_in_memory[i]->r = 0;
+        }
+    }
+}
+int evict_NRU(Page ** pagesInMemory ,int * pageIndexes, int num_pages ){
 	int i,
 		class;
 	
 	srand( (unsigned)time(NULL) );
 
-	Page * lowest_class_page_seen = NULL;
+	int lowest_class_index = -1;
 	char lowest_class_seen = 4; // 4 is bigger than any class.
 
 	
@@ -71,23 +78,26 @@ Page * evict_NRU(Page ** pagesInMemory , int num_pages ){
 
 	for (i=0;i<num_pages;i++){
 		int index = (first_to_check + i)%num_pages;
-		Page * current_page = pagesInMemory + index*sizeof(Page);
+		Page * current_page = pagesInMemory[index];
 		int curr_class = getPageClass(current_page)
 		if ( curr_class < lowest_class_seen ){
-			if ( curr_class == 0 ) return current_page;
+			if ( curr_class == 0 ) return pageIndexes[index];
 			lowest_class_seen = curr_class;
-			lowest_class_page_seen = current_page;	
+			lowest_class_index = index;	
 		}
 			
 	}	
-	return current_page;
+	return lowest_class_index;
 	
 }
 
-Page * evict_SEG(Page ** pagesInMemory , int num_pages ){}
+int evict_SEG(Page ** pagesInMemory , int num_pages ){return 0;}
 
-Page * evict_LRU(Page ** pagesInMemory , int num_pages ){}
+void update_SEG(Page ** pagesInMemory , int num_pages ){ }
 
+int evict_LRU(Page ** pagesInMemory , int num_pages ){ return 0;}
+
+void update_LRU(Page ** pagesInMemory , int num_pages ){ }
 
 static char getPageClass(Page * page){ 
 	return 2*page->m + page->r;
