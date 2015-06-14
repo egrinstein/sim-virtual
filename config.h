@@ -13,8 +13,9 @@ int getAlgorithmMode(const char* mode){
 	algorithm_modes[1] = "NRU";
 	algorithm_modes[2] = "SEG";
     for(i = 0;i<num_modes;i++){
-        if(strcmp(algorithm_modes[i],mode)==0) 
-            return i;
+        if(strcmp(algorithm_modes[i],mode)==0){          
+		   return i;
+		}
     }
     return -1;
 }

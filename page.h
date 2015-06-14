@@ -14,11 +14,11 @@ Page * createPageTable(int page_size);
 
 Page ** createMemory(int num_pages);
 
-int evict_SEG(Page ** pagesInMemory , int num_pages );
+int evict_SEG(Page ** pagesInMemory ,  int * pageIndexes, int num_pages );
 
-int evict_LRU(Page ** pagesInMemory , int num_pages );
+int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages );
 
-int evict_NRU(Page ** pagesInMemory , int num_pages );
+int evict_NRU(Page ** pagesInMemory , int * pageIndexes, int num_pages );
 
 void update_SEG(Page ** pagesInMemory , int num_pages );
 
