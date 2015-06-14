@@ -1,4 +1,9 @@
 #include <stdio.h>
+#ifdef cleanout 
+    #define DEBUG(...); (void)0;
+#else
+    #define DEBUG(...); printf(...);
+#endif
 #include <stdlib.h>
 #include "config.h"
 #include "access.h"
@@ -47,7 +52,7 @@ int main(int argc, const char *argv[])
     if(!(memory_size>8 ||memory_size<32)){
         ESCAPE("Page size should be between 128 and 16384 kb.");
     }
-	printf("initializing simulation...\n");
+	DEBUG("initializing simulation...\n");
     simulate(algorithm_mode, accesses, num_accesses, page_size, memory_size);
 
     return 0;

@@ -6,6 +6,11 @@
 #include <string.h>
 #include "lista.h"
 #define INTERRUPT 100
+#ifdef cleanout 
+    #define DEBUG(...); (void)0;
+#else
+    #define DEBUG(...); printf(...);
+#endif
 
 
 static int access_index(int * pageIndexes, int num_frames, unsigned int index, int * return_flag){
@@ -58,26 +63,26 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 			ordered_pages = LIS_CriarLista( NULL );
 			break;
 		default:
-			printf("Unknown algorithm\n");
+			DEBUG("Unknown algorithm\n");
 			return;
     }
-	printf("creating page table...\n");
+	DEBUG("creating page table...\n");
 	pageTable = createPageTable(page_size);
 	if (!pageTable){
-		printf("Could not create page table");
+		DEBUG("Could not create page table");
 		return ;
 	} 
 	
-	printf("creating simulated memory...\n");
+	DEBUG("creating simulated memory...\n");
 	pagesInMemory = createMemory(num_frames);
 	if (!pagesInMemory){
-		printf("Could not create Memory");
+		DEBUG("Could not create Memory");
 		return ;
 	} 
 
 	pageIndexes = malloc(num_frames*sizeof(int));
 	if (!pageIndexes){
-		printf("Could not create Page Indexes");
+		DEBUG("Could not create Page Indexes");
 		return ;
 	} 
 	memset(pageIndexes,-1,num_frames*sizeof(int));
@@ -165,6 +170,9 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 		}
         new_page->r = 1; //it always changes r to 1 (see NRU).
     }
-	printf("Pages written to disk: %d\nPage Faults: %d\n",pages_written_to_disk,page_faults);
-
+    #ifdef cleanout
+        printf("%d\n%d\n",pages_written_to_disk,page_faults);
+    #else
+        DEBUG("Pages written to disk: %d\nPage Faults: %d\n",pages_written_to_disk,page_faults);
+    #endif
 }
