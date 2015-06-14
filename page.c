@@ -75,9 +75,41 @@ void clock_update(Page ** pagesInMemory , int num_pages )
     }
 }
 
+void update_page_ages(Page ** pagesInMemory, int * pageAges, int num_pages){
+	int i;
+	
+	for (i=0;i<num_pages;i++){
+
+		int increment;
+		if (!pagesInMemory[i]) continue;
+
+		increment = pagesInMemory[i]->r << (8*sizeof(int) - 1);
+		pageAges[i] = pageAges[i] >> 1;
+		pageAges[i] = pageAges[i] | increment;
+	}
+
+}
 
 
-int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , LIS_tppLista ordered_pages){ return 0;}
+int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , int * pageAges){ 
+	int i,
+		min_age = -1,
+		min_age_index = -1;
+	
+	for (i=0;i<num_pages;i++){
+		if (min_age == -1){
+			min_age = pageAges[i];
+			min_age_index = i;
+		}
+		if ( pageAges[i] < min_age ){
+			min_age = pageAges[i];
+			min_age_index = i;
+		}
+	}
+	return min_age_index;
+
+
+}
 
 int evict_NRU(Page ** pagesInMemory ,int * pageIndexes, int num_pages){
 	int i;
@@ -133,18 +165,4 @@ int evict_SEG(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , LIS_tp
 	return -1;
 
 }
-
-
-/*
-void update_LRU(Page ** pagesInMemory , int num_pages ){ }
-
-void update_NRU(Page ** pages_in_memory , int num_pages){
-    int i;
-    for(i = 0; i < num_pages; ++i) {
-        if(pages_in_memory[i]) {
-			pages_in_memory[i]->r = 0;
-        }
-    }
-}
-*/
 
