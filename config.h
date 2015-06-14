@@ -1,7 +1,7 @@
 #include <string.h>
 
 const char manual[] = 
-    "\n4 arguments:\nThe Algorithm Mode: \"LRU\", \"NRU\" or \"SEG\"\nThe unix path to an access log\nThe page size in KB (integer > 0)\nThe physical memory size in KB (integer > 0)\n"
+    "\n4 arguments:\nThe Algorithm Mode: \"LRU\", \"NRU\" or \"SEG\"\nThe unix path to an access log\nThe page size in KB (8 < integer < 32)\nThe physical memory size in KB (128 < integer < 16384)\n"
 ;
 
 int getAlgorithmMode(const char* mode){

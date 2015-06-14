@@ -4,16 +4,16 @@
 #include <time.h>
 #include "page.h"
 
-unsigned int log2( unsigned int x )
+unsigned int m_log2( unsigned int x )
 {
+  //return (int) log( x ) / log( 2. );
   unsigned int ans = 0 ;
   while( x>>=1 ) ans++;
   return ans ;
 }
 
 int getAddress(unsigned int addr,int page_size){
-    //int shift = (int) log( page_size << 10 ) / log( 2. );
-    unsigned int shift = log2(page_size << 10);
+    unsigned int shift = m_log2(page_size << 10);
     return addr >> (shift );
 
 }
@@ -28,7 +28,7 @@ Page * createPageTable(int page_size){
     int table_size;
 	Page *aux_page;
 	Page *pageTable ;
-	unsigned int space = log2(page_size << 10);
+	unsigned int space = m_log2(page_size << 10);
 
 	table_size = pow(2, 32 - space);
 	pageTable = (Page*)malloc(table_size* sizeof(Page));

@@ -4,7 +4,7 @@
 #include "access.h"
 #include "sim.h"
 
-#define ESCAPE(); printf("%s",manual);return 0;
+#define ESCAPE(MSG); printf(MSG);printf("%s",manual);return 0;
 
 
 
@@ -19,31 +19,33 @@ int main(int argc, const char *argv[])
     int memory_size;
 	
     if(argc < 5) {
-        ESCAPE();
+        ESCAPE("\n");
     }
 	algorithm_mode = getAlgorithmMode(argv[1]);
 	page_size = atol(argv[3]);
     memory_size = atol(argv[4]);
 
     if(algorithm_mode == -1){
-        printf("Algorithm mode not acceptable.");
-        ESCAPE();
+        ESCAPE("Algorithm mode not acceptable.");
     }
     
     accesses = readLog(argv[2],&num_accesses);
     if(accesses == NULL){
-        printf("Log format not acceptable.");
-        ESCAPE();
+        ESCAPE("Log format not acceptable.");
     } 
     
     //check boundaries
     if(!(page_size > 0)){
-        printf("Page size either is not an integer or is 0.");
-        ESCAPE();
+        ESCAPE("Page size either is not an integer or is 0.");
+    }
+    if(!(page_size>8 ||page_size<32)){
+        ESCAPE("Page size should be between 8 and 32 kb.");
     }
     if(!(memory_size > 0)){
-        printf("Memory size either is not an integer or is 0.");
-        ESCAPE();
+        ESCAPE("Memory size either is not an integer or is 0.");
+    }
+    if(!(memory_size>8 ||memory_size<32)){
+        ESCAPE("Page size should be between 128 and 16384 kb.");
     }
 	printf("initializing simulation...\n");
     simulate(algorithm_mode, accesses, num_accesses, page_size, memory_size);
