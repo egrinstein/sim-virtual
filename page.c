@@ -15,6 +15,7 @@ int getAddress(unsigned int addr,int page_size){
     //int shift = (int) log( page_size << 10 ) / log( 2. );
     unsigned int shift = log2(page_size << 10);
     return addr >> (shift );
+
 }
 
 static char getPageClass(Page * page){ 
@@ -28,6 +29,7 @@ Page * createPageTable(int page_size){
 	Page *aux_page;
 	Page *pageTable ;
 	unsigned int space = log2(page_size << 10);
+
 	table_size = pow(2, 32 - space);
 	pageTable = (Page*)malloc(table_size* sizeof(Page));
 	
@@ -60,18 +62,25 @@ Page ** createMemory(int num_pages){
 }
 
 
-void update_NRU(Page ** pages_in_memory , int num_pages)
+
+
+
+void clock_update(Page ** pagesInMemory , int num_pages )
 {
     int i;
     for(i = 0; i < num_pages; ++i) {
-        if(pages_in_memory[i]) {
-			pages_in_memory[i]->r = 0;
+        if(pagesInMemory[i]) {
+			pagesInMemory[i]->r = 0;
         }
     }
 }
-int evict_NRU(Page ** pagesInMemory ,int * pageIndexes, int num_pages ){
-	int i,
-		class;
+
+
+
+int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , LIS_tppLista ordered_pages){ return 0;}
+
+int evict_NRU(Page ** pagesInMemory ,int * pageIndexes, int num_pages){
+	int i;
 	int first_to_check;
 	
 
@@ -99,14 +108,43 @@ int evict_NRU(Page ** pagesInMemory ,int * pageIndexes, int num_pages ){
 	
 }
 
-int evict_SEG(Page ** pagesInMemory ,  int * pageIndexes, int num_pages ){return 0;}
+int evict_SEG(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , LIS_tppLista ordered_pages ){
 
-void update_SEG(Page ** pagesInMemory , int num_pages ){ }
+	Page * oldest_page_suitable;
+	int i;
+	IrInicioLista( ordered_pages );
+	
+	oldest_page_suitable = (Page *) LIS_ObterValor( ordered_pages );
+	while (oldest_page_suitable->r == 1){
+		LIS_ExcluirElemento( ordered_pages );
+		IrFinalLista( ordered_pages );
+		LIS_InserirElementoApos(ordered_pages,(void *)oldest_page_suitable);
+		oldest_page_suitable->r = 0;
+		IrInicioLista( ordered_pages );
+		oldest_page_suitable = (Page *) LIS_ObterValor( ordered_pages );
+	}
+	LIS_ExcluirElemento( ordered_pages );
 
-int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages ){ return 0;}
+	for (i=0;i<num_pages;i++){
+		if (pagesInMemory[i] == oldest_page_suitable)
+			return i;
+	} /* Bad for performance*/
+	
+	return -1;
 
+}
+
+
+/*
 void update_LRU(Page ** pagesInMemory , int num_pages ){ }
 
-
-
+void update_NRU(Page ** pages_in_memory , int num_pages){
+    int i;
+    for(i = 0; i < num_pages; ++i) {
+        if(pages_in_memory[i]) {
+			pages_in_memory[i]->r = 0;
+        }
+    }
+}
+*/
 
