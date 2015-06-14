@@ -17,7 +17,7 @@ Page * createPageTable(int page_size);
 
 Page ** createMemory(int num_pages);
 
-int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , int * pageAges);
+int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , unsigned int * pageAges);
 
 int evict_NRU( Page ** pagesInMemory , int * pageIndexes, int num_pages );
 
@@ -25,6 +25,6 @@ int evict_SEG(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , LIS_tp
 
 void clock_update(Page ** pagesInMemory , int num_pages );
 
-void update_page_ages(Page ** pagesInMemory, int * pageAges, int num_pages);
+void update_page_ages(Page ** pagesInMemory, unsigned int * pageAges, int num_pages);
 
 #endif

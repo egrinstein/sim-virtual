@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <limits.h>
 #include "page.h"
 
 unsigned int m_log2( unsigned int x )
@@ -75,32 +76,24 @@ void clock_update(Page ** pagesInMemory , int num_pages )
     }
 }
 
-void update_page_ages(Page ** pagesInMemory, int * pageAges, int num_pages){
+void update_page_ages(Page ** pagesInMemory, unsigned int * pageAges, int num_pages){
 	int i;
 	
 	for (i=0;i<num_pages;i++){
 
-		int increment;
 		if (!pagesInMemory[i]) continue;
 
-		increment = pagesInMemory[i]->r << (8*sizeof(int) - 1);
 		pageAges[i] = pageAges[i] >> 1;
-		pageAges[i] = pageAges[i] | increment;
 	}
 
 }
 
 
-int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages , int * pageAges){ 
+int evict_LRU(Page ** pagesInMemory ,  int * pageIndexes, int num_pages ,unsigned int * pageAges){ 
 	int i,
-		min_age = -1,
 		min_age_index = -1;
-	
+	unsigned int min_age = UINT_MAX;
 	for (i=0;i<num_pages;i++){
-		if (min_age == -1){
-			min_age = pageAges[i];
-			min_age_index = i;
-		}
 		if ( pageAges[i] < min_age ){
 			min_age = pageAges[i];
 			min_age_index = i;

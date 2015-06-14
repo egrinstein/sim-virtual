@@ -46,7 +46,7 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 	int pages_written_to_disk = 0;
 
 	/* LRU specific data*/
-	int * pageAges;
+	unsigned int * pageAges;
 
 	/* SEG specific data*/
 	LIS_tppLista ordered_pages;
@@ -159,7 +159,12 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 		}
 		new_page = &pageTable[pageIndexes[aux_index]];
 
-		
+		/*LRU specific counter*/
+		if (mode == 0){
+			unsigned int increment;
+			increment = i << (8*sizeof(int) - 1);
+			pageAges[aux_index] = pageAges[aux_index] + increment;
+		}		
 
 
 		//INFO UPDATE (always executed)::
