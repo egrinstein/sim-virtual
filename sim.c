@@ -9,7 +9,7 @@
 #ifdef cleanout 
     #define DEBUG(...); (void)0;
 #else
-    #define DEBUG(...); printf(...);
+    #define DEBUG printf
 #endif
 
 
