@@ -17,6 +17,7 @@ int main(int argc, const char *argv[])
 	int algorithm_mode;
 	int page_size;
     int memory_size;
+	
     if(argc < 5) {
         ESCAPE();
     }
@@ -44,7 +45,7 @@ int main(int argc, const char *argv[])
         printf("Memory size either is not an integer or is 0.");
         ESCAPE();
     }
-	
+	printf("initializing simulation...\n");
     simulate(algorithm_mode, accesses, num_accesses, page_size, memory_size);
 
     return 0;
