@@ -27,7 +27,7 @@
 #include   <assert.h>
 
 #define LISTA_OWN
-#include "LISTA.H"
+#include "lista.h"
 #undef LISTA_OWN
 
 /***********************************************************************

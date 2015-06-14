@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "LISTA.H"
+#include "lista.h"
 #define INTERRUPT 100
 
 

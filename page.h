@@ -1,6 +1,6 @@
 #ifndef PAGEH
 #define PAGEH
-#include "LISTA.H"
+#include "lista.h"
 
 typedef struct page{
 	int last_access;
