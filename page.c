@@ -19,7 +19,7 @@ int getAddress(unsigned int addr,int page_size){
 
 }
 
-static char getPageClass(Page * page){ 
+static int getPageClass(Page * page){ 
 	return (page->m)*2 + page->r;
 }
 
@@ -110,7 +110,7 @@ int evict_NRU(Page ** pagesInMemory ,int * pageIndexes, int num_pages){
 	
 
 	int lowest_class_index = -1;
-	char lowest_class_seen = 4; // 4 is bigger than any class.
+	int lowest_class_seen = 4; // 4 is bigger than any class.
 
 	
 	first_to_check = rand()%num_pages;
