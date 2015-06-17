@@ -162,7 +162,7 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 		/*LRU specific counter*/
 		if (mode == 0){
 			unsigned int increment;
-			increment = i << (8*sizeof(int) - 1);
+			increment = 1 << (8*sizeof(int) - 1);
 			pageAges[aux_index] = pageAges[aux_index] + increment;
 		}		
 
