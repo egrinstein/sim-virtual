@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lista.h"
-#define INTERRUPT 100
+#define INTERRUPT 80
 #ifdef cleanout 
     #define DEBUG(...); (void)0;
 #else
@@ -100,16 +100,13 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 		int curr_page_index = getAddress(curr_access.address,page_size);
 
 		
-        dt = i-dt;
-        interrupt_dt = interrupt_dt + dt;
-        if(interrupt_dt >= INTERRUPT){
+        if(i%INTERRUPT == 0){
 			/* LRU specific */
 			if (mode == 0){
 				update_page_ages(pagesInMemory,pageAges,num_frames);
 			}
 
             clock_update(pagesInMemory,num_frames);
-			interrupt_dt = 0;
 			   
         }
 
@@ -146,7 +143,7 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
                 aux_page->r = 0;
 
 			}
-			new_page = &pageTable[pageIndexes[aux_index]];
+			new_page = &pageTable[curr_page_index];
 			pageIndexes[aux_index] = curr_page_index;	
 			pagesInMemory[aux_index] = new_page;
 
@@ -157,7 +154,7 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 			}
 
 		}
-		new_page = &pageTable[pageIndexes[aux_index]];
+		new_page = &pageTable[curr_page_index];
 
 		/*LRU specific counter*/
 		if (mode == 0){

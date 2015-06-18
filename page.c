@@ -20,7 +20,14 @@ int getAddress(unsigned int addr,int page_size){
 }
 
 static int getPageClass(Page * page){ 
-	return (page->m)*2 + page->r;
+	int class = 0;
+	if (page->r){
+		class+=2;
+	}
+	if (page->m){
+		class+=1;
+	}
+	return class;
 }
 
 
