@@ -1,4 +1,4 @@
-Arquivo,Algoritmo,Memoria (KB),Tamanho de Pagina (KB),Page Faults,Páginas Escritas em Disco
+Arquivo,Algoritmo,Memoria,TamanhoPagina,PageFaults,PaginasEscritas
 compilador,LRU,128,8,171159,31152
 compilador,LRU,128,16,292957,53531
 compilador,LRU,128,32,437204,74121
