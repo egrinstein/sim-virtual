@@ -33,7 +33,7 @@ static int access_index(int * pageIndexes, int num_frames, unsigned int index, i
 	return -1;
 }//returns the index of the page when it finds it, the index of a free page or -1 when needs eviction
 
-void simulate(int mode, Access* accesses, int num_accesses, int page_size, int memory_size){
+int simulate(int mode, Access* accesses, int num_accesses, int page_size, int memory_size,int * pages_written){
 
 	int * pageIndexes;
 	Page * pageTable;	
@@ -172,9 +172,12 @@ void simulate(int mode, Access* accesses, int num_accesses, int page_size, int m
 		}
         new_page->r = 1; //it always changes r to 1 (see NRU).
     }
+	
     #ifdef cleanout
-        printf("%d\n%d\n",pages_written_to_disk,page_faults);
+        //printf("%d,%d\n",page_faults,pages_written_to_disk);
     #else
         DEBUG("Pages written to disk: %d\nPage Faults: %d\n",pages_written_to_disk,page_faults);
     #endif
+	*pages_written = pages_written_to_disk;
+	return page_faults;
 }

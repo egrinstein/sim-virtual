@@ -17,15 +17,14 @@ do
     filename="${filename%.*}"
     out=$filename
     out+=".txt"
-	
     for mode in "${modes[@]}" 
     do
         for memory in "${memories[@]}" 
         do
             for page in "${pages[@]}" 
             do
-				#echo $mode $i $page $memory 
-				./sim-virtual $mode $i $page $memory  	
+		./sim-virtual $mode $i $page $memory >> $out  
+		
             done
         done
     done

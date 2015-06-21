@@ -22,7 +22,8 @@ int main(int argc, const char *argv[])
 	int algorithm_mode;
 	int page_size;
     int memory_size;
-	
+	int page_faults;
+	int pages_written;	
     if(argc < 5) {
         ESCAPE("\n");
     }
@@ -53,7 +54,8 @@ int main(int argc, const char *argv[])
         ESCAPE("Page size should be between 128 and 16384 kb.");
     }
 	DEBUG("initializing simulation...\n");
-    simulate(algorithm_mode, accesses, num_accesses, page_size, memory_size);
-
+    page_faults = simulate(algorithm_mode, accesses, num_accesses, page_size, memory_size, &pages_written);
+	
+	printf("%s,%s,%d,%d,%d,%d\n",argv[2],argv[1],memory_size,page_size,page_faults,pages_written);
     return 0;
 }
