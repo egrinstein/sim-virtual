@@ -11,7 +11,7 @@ gen_writes_per_fault_by_memory <- function(sim_data){
 		jpeg(paste(program,".jpeg",sep=""))
 		algs <- c("LRU","NRU","SEG")
 		colors <- c("red","green","blue")
-		ylimit <- max(sim_fixed_prog$PaginasEscritas/sim_fixed_prog$PageFaults)
+		ylimit <- max(sim_fixed_prog$PaginasEscritas)
 		for (algorithm in algs) {
 			print(algorithm)
 			sim_fixed_algorithm <- sim_fixed_prog[sim_fixed_prog$Algoritmo == algorithm,]
@@ -20,10 +20,10 @@ gen_writes_per_fault_by_memory <- function(sim_data){
 			Pages_written_per_fault <- Pages_Written/Page_Faults
 			Memoria_Total <- sim_fixed_algorithm$Memoria
 			if (i == 1){
-				plot(Memoria_Total,log='x',ylim=c(0.0,ylimit),Pages_written_per_fault,col=colors[i],xaxt='n',type="b",pch=14+i,xlab="Memória disponível",ylab="Páginas escritas page fault",main="(Páginas Escritas/ page fault)/Memória disponível (Página=8KB)")
+				plot(Memoria_Total,log='x',ylim=c(0.0,ylimit),Pages_Written,col=colors[i],xaxt='n',type="b",pch=14+i,xlab="Memória disponível",ylab="Páginas escritas",main="Páginas Escritas/Memória disponível (Página=8KB)")
 			} else{
 				print("Mamae")
-				lines(Memoria_Total,Pages_written_per_fault,col=colors[i],type="b",pch=14+i)
+				lines(Memoria_Total,Pages_Written,col=colors[i],type="b",pch=14+i)
 			}
 			axis(1,at=Memoria_Total,labels=T)
 			#axis(2,at=c(1,max(Page_Faults)),labels=T)
